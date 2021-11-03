@@ -135,6 +135,10 @@ class heat::wsgi::apache_api_cfn (
   }
   $ssl_real = pick($ssl, true)
 
+  # See custom fragment below
+  include apache
+  include apache::mod::headers
+
   validate_legacy(Integer, 'validate_integer', $port)
 
   # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1396553
