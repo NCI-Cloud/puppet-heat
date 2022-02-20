@@ -151,7 +151,7 @@ define heat::wsgi::apache (
   ::openstacklib::wsgi::apache { "heat_${title}_wsgi":
     bind_host                   => $bind_host,
     bind_port                   => $port,
-    group                       => 'heat',
+    group                       => $::heat::params::group,
     path                        => $path,
     priority                    => $priority,
     servername                  => $servername,
