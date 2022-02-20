@@ -4,9 +4,9 @@
 #
 class heat::params {
   include openstacklib::defaults
-  $pyvers = $::openstacklib::defaults::pyvers
 
-  $client_package_name = "python${pyvers}-heatclient"
+  $client_package_name = 'python3-heatclient'
+  $user                = 'heat'
   $group               = 'heat'
 
   case $::osfamily {
