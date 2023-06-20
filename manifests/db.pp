@@ -49,15 +49,15 @@
 #
 class heat::db (
   $database_connection              = 'sqlite:////var/lib/heat/heat.sqlite',
-  $database_connection_recycle_time = $::os_service_default,
-  $database_max_pool_size           = $::os_service_default,
-  $database_max_retries             = $::os_service_default,
-  $database_retry_interval          = $::os_service_default,
-  $database_max_overflow            = $::os_service_default,
-  $database_pool_timeout            = $::os_service_default,
-  $mysql_enable_ndb                 = $::os_service_default,
-  $database_db_max_retries          = $::os_service_default,
-  $sync_db                          = true,
+  $database_connection_recycle_time = $facts['os_service_default'],
+  $database_max_pool_size           = $facts['os_service_default'],
+  $database_max_retries             = $facts['os_service_default'],
+  $database_retry_interval          = $facts['os_service_default'],
+  $database_max_overflow            = $facts['os_service_default'],
+  $database_pool_timeout            = $facts['os_service_default'],
+  $mysql_enable_ndb                 = $facts['os_service_default'],
+  $database_db_max_retries          = $facts['os_service_default'],
+  Boolean $sync_db                  = true,
 ) {
 
   include heat::deps

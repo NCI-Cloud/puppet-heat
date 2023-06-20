@@ -109,7 +109,7 @@
 #   class { 'heat::wsgi::apache': }
 #
 class heat::wsgi::apache_api_cfn (
-  $port                        = 8000,
+  Integer $port                = 8000,
   $servername                  = $::fqdn,
   $bind_host                   = undef,
   $path                        = '/',
@@ -134,8 +134,6 @@ class heat::wsgi::apache_api_cfn (
   $request_headers             = ['set Content-Type "application/json"'],
   $vhost_custom_fragment       = undef,
 ) {
-
-  validate_legacy(Integer, 'validate_integer', $port)
 
   # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1396553
   if $::osfamily == 'RedHat' and $port == 8000 and $::selinux {

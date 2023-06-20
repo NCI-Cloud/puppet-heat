@@ -179,39 +179,39 @@
 #   Defaults to undef
 #
 class heat::engine (
-  $auth_encryption_key,
+  String $auth_encryption_key,
   $package_ensure                                  = 'present',
-  $manage_service                                  = true,
-  $enabled                                         = true,
-  $heat_stack_user_role                            = $::os_service_default,
-  $heat_metadata_server_url                        = $::os_service_default,
-  $heat_waitcondition_server_url                   = $::os_service_default,
-  $default_software_config_transport               = $::os_service_default,
-  $default_deployment_signal_transport             = $::os_service_default,
-  $default_user_data_format                        = $::os_service_default,
-  $reauthentication_auth_method                    = $::os_service_default,
-  $allow_trusts_redelegation                       = $::os_service_default,
-  $trusts_delegated_roles                          = $::os_service_default,
-  $instance_connection_is_secure                   = $::os_service_default,
-  $instance_connection_https_validate_certificates = $::os_service_default,
-  $max_stacks_per_tenant                           = $::os_service_default,
-  $max_resources_per_stack                         = $::os_service_default,
-  $action_retry_limit                              = $::os_service_default,
-  $client_retry_limit                              = $::os_service_default,
-  $max_server_name_length                          = $::os_service_default,
-  $max_interface_check_attempts                    = $::os_service_default,
-  $event_purge_batch_size                          = $::os_service_default,
-  $max_events_per_stack                            = $::os_service_default,
-  $stack_action_timeout                            = $::os_service_default,
-  $error_wait_time                                 = $::os_service_default,
-  $engine_life_check_timeout                       = $::os_service_default,
-  $num_engine_workers                              = $::os_workers_heat_engine,
-  $convergence_engine                              = $::os_service_default,
-  $environment_dir                                 = $::os_service_default,
-  $template_dir                                    = $::os_service_default,
-  $max_nested_stack_depth                          = $::os_service_default,
-  $plugin_dirs                                     = $::os_service_default,
-  $server_keystone_endpoint_type                   = $::os_service_default,
+  Boolean $manage_service                          = true,
+  Boolean $enabled                                 = true,
+  $heat_stack_user_role                            = $facts['os_service_default'],
+  $heat_metadata_server_url                        = $facts['os_service_default'],
+  $heat_waitcondition_server_url                   = $facts['os_service_default'],
+  $default_software_config_transport               = $facts['os_service_default'],
+  $default_deployment_signal_transport             = $facts['os_service_default'],
+  $default_user_data_format                        = $facts['os_service_default'],
+  $reauthentication_auth_method                    = $facts['os_service_default'],
+  $allow_trusts_redelegation                       = $facts['os_service_default'],
+  $trusts_delegated_roles                          = $facts['os_service_default'],
+  $instance_connection_is_secure                   = $facts['os_service_default'],
+  $instance_connection_https_validate_certificates = $facts['os_service_default'],
+  $max_stacks_per_tenant                           = $facts['os_service_default'],
+  $max_resources_per_stack                         = $facts['os_service_default'],
+  $action_retry_limit                              = $facts['os_service_default'],
+  $client_retry_limit                              = $facts['os_service_default'],
+  $max_server_name_length                          = $facts['os_service_default'],
+  $max_interface_check_attempts                    = $facts['os_service_default'],
+  $event_purge_batch_size                          = $facts['os_service_default'],
+  $max_events_per_stack                            = $facts['os_service_default'],
+  $stack_action_timeout                            = $facts['os_service_default'],
+  $error_wait_time                                 = $facts['os_service_default'],
+  $engine_life_check_timeout                       = $facts['os_service_default'],
+  $num_engine_workers                              = $facts['os_workers_heat_engine'],
+  $convergence_engine                              = $facts['os_service_default'],
+  $environment_dir                                 = $facts['os_service_default'],
+  $template_dir                                    = $facts['os_service_default'],
+  $max_nested_stack_depth                          = $facts['os_service_default'],
+  $plugin_dirs                                     = $facts['os_service_default'],
+  $server_keystone_endpoint_type                   = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $deferred_auth_method                            = undef,
 ) {
@@ -230,16 +230,12 @@ class heat::engine (
   include heat
   include heat::params
 
-  # plugin_dirs value follows these rules:
-  # - default is $::os_service_default so Puppet won't try to configure it.
-  # - if set, array validation will be done for not empty and then configure the parameter.
-  # - Otherwise, fallback to default.
-  if !is_service_default($plugin_dirs) and !empty($plugin_dirs) {
-    validate_legacy(Array, 'validate_array', $plugin_dirs)
-
-    $plugin_dirs_real = join($plugin_dirs, ',')
+  if is_service_default($plugin_dirs) {
+    $plugin_dirs_real = $facts['os_service_default']
+  } elsif empty($plugin_dirs) {
+    $plugin_dirs_real = $facts['os_service_default']
   } else {
-    $plugin_dirs_real = $::os_service_default
+    $plugin_dirs_real = join(any2array($plugin_dirs), ',')
   }
 
   package { 'heat-engine':
