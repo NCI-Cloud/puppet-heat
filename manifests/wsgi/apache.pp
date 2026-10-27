@@ -116,7 +116,7 @@ define heat::wsgi::apache (
   $servername                  = $::fqdn,
   $bind_host                   = undef,
   $path                        = '/',
-  $ssl                         = false,
+  Boolean $ssl                 = false,
   $workers                     = $::os_workers,
   $ssl_cert                    = undef,
   $ssl_key                     = undef,
@@ -144,7 +144,7 @@ define heat::wsgi::apache (
   include heat::params
   include apache
   include apache::mod::wsgi
-  if $ssl_real {
+  if $ssl {
     include apache::mod::ssl
   }
 
